@@ -7,7 +7,11 @@ import com.mek.tmdbapp.Util.loadCircleImage
 import com.mek.tmdbapp.databinding.ItemHomeRecyclerViewBinding
 import com.mek.tmdbapp.model.MovieItems
 
-class MovieAdapter(private val movieList : List<MovieItems?>) : RecyclerView.Adapter<MovieAdapter.viewHolder>() {
+interface MovieClickListener{
+    fun onMovieClick(movieId: Int)
+}
+
+class MovieAdapter(private val movieList : List<MovieItems?>,private val movieClickListener: MovieClickListener) : RecyclerView.Adapter<MovieAdapter.viewHolder>() {
 
     inner class viewHolder(val binding: ItemHomeRecyclerViewBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -28,5 +32,12 @@ class MovieAdapter(private val movieList : List<MovieItems?>) : RecyclerView.Ada
         holder.binding.textViewMovieVote.text = movie?.voteAverage.toString()
 
         holder.binding.imageViewMovie.loadCircleImage(movie?.posterPath)
+
+        holder.binding.root.setOnClickListener {
+            movie?.id?.let {
+                movieClickListener.onMovieClick(movieId = movie.id)
+            }
+
+        }
     }
 }

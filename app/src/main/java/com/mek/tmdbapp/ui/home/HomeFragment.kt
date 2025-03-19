@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.mek.tmdbapp.R
 import com.mek.tmdbapp.databinding.FragmentHomeBinding
 
@@ -52,7 +53,15 @@ class HomeFragment : Fragment() {
                 binding.txtErorMessageInfo.text = "hiç film bulunamadı :("
                 binding.txtErorMessageInfo.isVisible = true
             }else{
-                movieAdapter = MovieAdapter(list)
+                movieAdapter = MovieAdapter(list, object  : MovieClickListener{
+                    override fun onMovieClick(movieId: Int) {
+                        movieId?.let {
+                            val action = HomeFragmentDirections.actionHomeFragmentToDetailFragment(it)
+                            findNavController().navigate(action)
+                        }
+                    }
+
+                })
                 binding.homeRecyclerView.adapter = movieAdapter
             }
 
