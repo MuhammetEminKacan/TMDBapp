@@ -15,6 +15,7 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<HomeViewModel>()
+    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +48,14 @@ class HomeFragment : Fragment() {
             binding.progressBar.isVisible = loading
         }
         viewModel.movieList.observe(viewLifecycleOwner){ list ->
-            println(list)
+            if (list.isNullOrEmpty()){
+                binding.txtErorMessageInfo.text = "hiç film bulunamadı :("
+                binding.txtErorMessageInfo.isVisible = true
+            }else{
+                movieAdapter = MovieAdapter(list)
+                binding.homeRecyclerView.adapter = movieAdapter
+            }
+
         }
     }
 
